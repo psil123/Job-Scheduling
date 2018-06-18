@@ -37,7 +37,7 @@ public class JobScheduler {
 		for(int i=1;i<=dim;i++)
 		{
 			Job popped=pq.remove();
-			schedule[i]=Integer.parseInt(popped.jobID);
+			schedule[i-1]=Integer.parseInt(popped.jobID);
 			popped.processingTime--;
 			if(popped.processingTime>0)
 				pq.add(popped);
