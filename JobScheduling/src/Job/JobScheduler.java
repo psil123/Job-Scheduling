@@ -24,7 +24,7 @@ public class JobScheduler {
 		}
 		return jobs;
 	}
-	int schedule(List<Job> jobs)
+	public int schedule(List<Job> jobs)
 	{
 		PriorityQueue<Job> pq = new PriorityQueue<Job>(jobs.size(), new JobComparator());
 		double dim = 0;
