@@ -1,4 +1,7 @@
 package Job;
+
+import java.util.StringTokenizer;
+
 public class Job {
 
 	public String jobID;
@@ -7,6 +10,7 @@ public class Job {
 	public int setUpTime; //also called ready time, time when job is available, can't be scheduled before this time
 	//public String parentJob;
 	public int waitTime;
+	public int weight=0;
 	/**
 	 * @param processingTime
 	 * @param dueDate
@@ -34,16 +38,22 @@ public class Job {
 		this.setUpTime = setUpTime;
 		this.waitTime=waitTime;
 	}
-	
-	public String getJobID() {
-		return jobID;
+	public Job(String s)
+	{
+		StringTokenizer st=new StringTokenizer(s+",",",");
+		this.jobID=st.nextToken();
+		this.processingTime=Integer.parseInt(st.nextToken());
+		this.dueDate=Integer.parseInt(st.nextToken());
+		this.setUpTime=Integer.parseInt(st.nextToken());
+		this.weight=Integer.parseInt(st.nextToken());
 	}
+	
 	
 	
 	public boolean isEqualTo(Job T) {
 		
 		Job j = T;
-		if (j.getJobID()==this.jobID)
+		if (j.jobID==this.jobID)
 			return true;
 		else
 			return false;
@@ -51,7 +61,7 @@ public class Job {
 	
 	public String toString(){
 		String s;
-		s = this.getJobID()+"\t"+this.processingTime+"\t"+this.dueDate+"\t"+this.setUpTime;
+		s = this.jobID+","+this.processingTime+","+this.dueDate+","+this.setUpTime+","+this.weight;
 		return s;
 	}
 	

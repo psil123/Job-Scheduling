@@ -6,24 +6,7 @@ import java.util.PriorityQueue;
 
 public class JobScheduler {
 	
-	public List<Job> generate(int n,double r,double t,int MAX_PI,int MIN_WI,int MAX_WI)
-	{
-		int P=0,C=0;
-		List<Job> jobs=new ArrayList<Job>();
-		for(int i=0;i<n;i++)
-		{
-			jobs.add(new Job(Integer.toString(i), (int)(1+(MAX_PI-1)*Math.random()), 0, 0));
-			P+=jobs.get(i).processingTime;
-		}
-		for(int i=0;i<n;i++) 
-		{
-			C+=jobs.get(i).processingTime;
-			jobs.get(i).dueDate=(int)(Math.ceil(P*(1-t-r/2))+(Math.ceil(P*(1-t+r/2))-Math.ceil(P*(1-t-r/2)))*Math.random());
-			jobs.get(i).setUpTime=(int)(C/2*Math.random());
-			jobs.get(i).waitTime=(int)(MIN_WI+(MAX_WI-MIN_WI)*Math.random());
-		}
-		return jobs;
-	}
+	
 	public int schedule(List<Job> jobs)
 	{
 		PriorityQueue<Job> pq = new PriorityQueue<Job>(jobs.size(), new JobComparator());
