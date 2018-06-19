@@ -2,10 +2,16 @@ package Job;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import Data.DataGenerator;
+
 
 public class JobScheduler {
 	
-	
+	private DataGenerator dg;
+	public JobScheduler(DataGenerator dg)
+	{
+		this.dg=dg;
+	}
 	public int schedule(List<Job> jobs)
 	{
 		PriorityQueue<Job> pq = new PriorityQueue<Job>(jobs.size(), new JobComparator());
