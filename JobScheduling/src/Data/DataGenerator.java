@@ -30,6 +30,7 @@ public class DataGenerator
 			jobs.get(i).setUpTime=(int)(C/2*Math.random());
 			jobs.get(i).waitTime=(int)(MIN_WI+(MAX_WI-MIN_WI)*Math.random());
 		}
+		//name the file as potts_n_jobs_<timestamp>.csv
 		if(writeToCSV)
 			writeToCSV(jobs,(fname==null)?"Data":fname,false);
 		return jobs;
