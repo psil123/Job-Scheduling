@@ -73,4 +73,12 @@ public class DataGenerator
 	public List<Job> getJoblist() {
 		return joblist;
 	}
+	public void setfname(String fname)
+	{
+		this.fname=fname;
+	}
+	public String getfname()
+	{
+		return fname;
+	}
 }
