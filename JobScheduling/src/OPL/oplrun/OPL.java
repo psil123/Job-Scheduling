@@ -29,13 +29,14 @@ public class OPL {
 	IloOplFactory oplF;
 	IloCplex cplex;
 	IloOplModel opl;
+	OPLDataModel op;
 	
 	boolean debugMode = false;
 	
-	public OPL(String modelPath, String dataPath) {
+	public OPL(String modelPath,OPLDataModel op) {
 		super();
 		this.modelPath = modelPath;
-		this.dataPath = dataPath;
+		this.op = op;
 	}
 	
 	public void startEngine() throws IloException{
@@ -49,8 +50,8 @@ public class OPL {
 		cplex.setOut(null);
 		opl = oplF.createOplModel(def, cplex);
 		//IloOplDataSource dataSource = new DataModel(oplF);
-		DataModel data = new DataModel(oplF);
-		opl.addDataSource(data);
+		//DataModel data = new DataModel(oplF);
+		opl.addDataSource(op);
 		opl.generate();
 	}
 
