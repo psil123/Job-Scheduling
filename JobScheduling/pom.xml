@@ -16,6 +16,13 @@
       </plugin>
     </plugins>
   </build>
+      <repositories>
+		<repository>
+		<id>MavenRepoTest</id>
+		<name>MavenRepoTest</name>
+		<url>file://D:\GIT repo\MavenRepoTest</url>
+		</repository>
+	</repositories>
   <dependencies>
   	<dependency>
   		<groupId>junit</groupId>
