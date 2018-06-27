@@ -23,6 +23,4 @@ public class Test {
 		opl.printResult();
 		opl.closeOPL();
 	}
-
-	
 }
