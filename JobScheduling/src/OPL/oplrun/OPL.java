@@ -1,5 +1,6 @@
 package OPL.oplrun;
 
+import Data.DataGenerator;
 import ilog.concert.IloDiscreteDataCollectionArray;
 import ilog.concert.IloException;
 import ilog.concert.IloIntMap;
@@ -29,14 +30,14 @@ public class OPL {
 	IloOplFactory oplF;
 	IloCplex cplex;
 	IloOplModel opl;
-	OPLDataModel op;
+	DataGenerator dg;
 	
 	boolean debugMode = false;
 	
-	public OPL(String modelPath,OPLDataModel op) {
+	public OPL(String modelPath,DataGenerator dg) {
 		super();
 		this.modelPath = modelPath;
-		this.op = op;
+		this.dg = dg;
 	}
 	
 	public void startEngine() throws IloException{
@@ -50,8 +51,9 @@ public class OPL {
 		cplex.setOut(null);
 		opl = oplF.createOplModel(def, cplex);
 		//IloOplDataSource dataSource = new DataModel(oplF);
-		//DataModel data = new DataModel(oplF);
-		opl.addDataSource(op);
+		DataModel data = new DataModel(oplF);
+		data.customRead();
+		opl.addDataSource(data);
 		opl.generate();
 	}
 

@@ -22,7 +22,7 @@ public class DataGenerator
 	{
 		this.fname=fname;
 	}
-	public void manageData(int n,double r,double t,int MAX_PI,int MIN_WI,int MAX_WI) throws Exception
+	public void generateData(int n,double r,double t,int MAX_PI,int MIN_WI,int MAX_WI) throws Exception
 	{
 		if(fname.length()==0)
 			generatePott(n,r,t,MAX_PI,MIN_WI,MAX_WI);
@@ -50,7 +50,7 @@ public class DataGenerator
 	
 	private void writeToCSV() throws IOException
 	{
-		File file =new File("Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".csv");
+		File file =new File("data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".csv");
 		FileWriter fw=new FileWriter(file);
 		for(Job i:getJoblist())
 			fw.append(i.toString()+"\n");

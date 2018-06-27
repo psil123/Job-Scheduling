@@ -29,5 +29,10 @@
   		<artifactId>junit</artifactId>
   		<version>4.0</version>
   	</dependency>
+  	    <dependency>
+    	<groupId>com.ibm</groupId>
+    	<artifactId>opl</artifactId>
+    	<version>12.6.0</version>
+    </dependency>
   </dependencies>
 </project>

@@ -13,8 +13,9 @@ public class JobScheduler {
 		this.dg=dg;
 	}
 	
-	public int schedule(List<Job> jobs)
+	public int schedule()
 	{
+		List<Job> jobs = dg.getJoblist();
 		PriorityQueue<Job> pq = new PriorityQueue<Job>(jobs.size(), new JobComparator());
 		double dim = 0;
 		for(Job i:jobs)

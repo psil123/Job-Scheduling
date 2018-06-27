@@ -19,27 +19,24 @@ public class OPLDataModel extends IloCustomOplDataSource
 	
 	public void customRead() 
 	{
-		try {
-			dg.manageData(10, 0.8, 0.6, 100, 1, 10);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			dg.manageData(10, 0.8, 0.6, 100, 1, 10);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		
-		IloOplDataHandler handler = getDataHandler();
+		    IloOplDataHandler handler = getDataHandler();
 			List<Job> jobs=dg.getJoblist();
-			
+						
 			handler.startElement("n");
-	        handler.startArray();
-			for(Job i:jobs)
-				handler.addIntItem(Integer.parseInt(i.jobID));
-			handler.endArray();
+			handler.addIntItem(jobs.size());
 	        handler.endElement();
 	        
 			handler.startElement("p");
-	        handler.startArray();
-			for(Job i:jobs)
-				handler.addIntItem(i.processingTime);
-			handler.endArray();
+	        handler.addIntItem((int) Math.floor(jobs.stream()
+	        										.mapToInt(j->j.processingTime)
+	        										.average()
+	        										.getAsDouble()));
 	        handler.endElement();
 	        
 			handler.startElement("r");
