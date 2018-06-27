@@ -48,7 +48,7 @@ public class OPL {
 		IloOplSettings settings = oplF.createOplSettings(errHandler);
 		IloOplModelDefinition def = oplF.createOplModelDefinition(modelSource,settings);
 		cplex = oplF.createCplex();
-		cplex.setOut(null);
+		cplex.setOut(System.out);
 		opl = oplF.createOplModel(def, cplex);
 		IloOplDataSource dataSource = oplF.createOplDataSource(dg.writeToDat());
 		opl.addDataSource(dataSource);

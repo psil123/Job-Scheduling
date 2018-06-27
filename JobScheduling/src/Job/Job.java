@@ -2,11 +2,13 @@ package Job;
 
 import java.util.StringTokenizer;
 
-public class Job {
+public class Job implements Cloneable{
 
 	public String jobID;
 	public int processingTime; //processing time of the job 
 	public int dueDate;	//time when job is due, if completion time is past this time, the job is tardy
+
+
 	public int setUpTime; //also called ready time, time when job is available, can't be scheduled before this time
 	//public String parentJob;
 	public int waitTime;
@@ -67,6 +69,12 @@ public class Job {
 	
 	public String getElementCode(){
 		return new String("P"+jobID);
+	}
+	
+	@Override
+	protected Job clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return new Job(jobID, processingTime, dueDate, setUpTime, waitTime);
 	}
 	
 }

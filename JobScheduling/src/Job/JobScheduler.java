@@ -1,6 +1,8 @@
 package Job;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 import Data.DataGenerator;
 
@@ -13,9 +15,12 @@ public class JobScheduler {
 		this.dg=dg;
 	}
 	
-	public int schedule()
+	public int schedule() throws CloneNotSupportedException
 	{
-		List<Job> jobs = dg.getJoblist();
+		List<Job> jobs = new LinkedList<Job>();
+		for(Job j:dg.getJoblist()){
+			jobs.add(j.clone());
+		}
 		PriorityQueue<Job> pq = new PriorityQueue<Job>(jobs.size(), new JobComparator());
 		double dim = 0;
 		for(Job i:jobs)
