@@ -51,7 +51,7 @@ public class DataGenerator
 	
 	private void writeToCSV() throws IOException
 	{
-		File file =new File("data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".csv");
+		File file =new File("Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".csv");
 		FileWriter fw=new FileWriter(file);
 		for(Job i:getJoblist())
 			fw.append(i.toString()+"\n");
@@ -75,8 +75,28 @@ public class DataGenerator
 	{
 		File file =new File("Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".dat");
 		FileWriter fw=new FileWriter(file);
-		for(Job i:getJoblist())
-			fw.append(i.toString()+"\n");
+		fw.append("n = "+joblist.size()+";\n");
+		fw.append("p = [");
+		for(int i=0;i<joblist.size()-1;i++)
+			fw.append(joblist.get(i).processingTime+",");
+		fw.append(joblist.get(joblist.size()-1).processingTime+"];\n");
+		
+
+		fw.append("r = [");
+		for(int i=0;i<joblist.size()-1;i++)
+			fw.append(joblist.get(i).setUpTime+",");
+		fw.append(joblist.get(joblist.size()-1).setUpTime+"];\n");
+		
+		fw.append("d = [");
+		for(int i=0;i<joblist.size()-1;i++)
+			fw.append(joblist.get(i).dueDate+",");
+		fw.append(joblist.get(joblist.size()-1).dueDate+"];\n");
+		
+		fw.append("w = [");
+		for(int i=0;i<joblist.size()-1;i++)
+			fw.append(joblist.get(i).weight+",");
+		fw.append(joblist.get(joblist.size()-1).weight+"];\n");
+		
 		fw.flush();
 		fw.close();
 		System.out.println("Data stored in : "+file.getAbsolutePath());
