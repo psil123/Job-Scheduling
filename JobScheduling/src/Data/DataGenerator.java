@@ -29,7 +29,7 @@ public class DataGenerator
 		else
 			readFromCSV(fname);
 	}
-	private void generatePott(int n,double r,double t,int MAX_PI,int MIN_WI,int MAX_WI) throws IOException
+	private void generatePott(int n,double r,double t,int MAX_PI,int MIN_WI,int MAX_WI) throws Exception
 	{
 		int P=0,C=0;
 		joblist=new ArrayList<Job>();
@@ -46,6 +46,7 @@ public class DataGenerator
 			getJoblist().get(i).waitTime=(int)(MIN_WI+(MAX_WI-MIN_WI)*Math.random());
 		}
 		writeToCSV();
+		writeToDat();
 	}
 	
 	private void writeToCSV() throws IOException
@@ -69,6 +70,16 @@ public class DataGenerator
 		while((line=read.readLine())!=null)
 			getJoblist().add(new Job(line));
 		read.close();
+	}
+	private void writeToDat() throws Exception
+	{
+		File file =new File("Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".dat");
+		FileWriter fw=new FileWriter(file);
+		for(Job i:getJoblist())
+			fw.append(i.toString()+"\n");
+		fw.flush();
+		fw.close();
+		System.out.println("Data stored in : "+file.getAbsolutePath());
 	}
 	public List<Job> getJoblist() {
 		return joblist;
