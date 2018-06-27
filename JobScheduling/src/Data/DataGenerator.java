@@ -46,7 +46,6 @@ public class DataGenerator
 			getJoblist().get(i).waitTime=(int)(MIN_WI+(MAX_WI-MIN_WI)*Math.random());
 		}
 		writeToCSV();
-		writeToDat();
 	}
 	
 	private void writeToCSV() throws IOException
@@ -71,28 +70,28 @@ public class DataGenerator
 			getJoblist().add(new Job(line));
 		read.close();
 	}
-	private void writeToDat() throws Exception
+	public String writeToDat() throws Exception
 	{
 		File file =new File("Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".dat");
 		FileWriter fw=new FileWriter(file);
-		fw.append("n = "+joblist.size()+";\n");
-		fw.append("p = [");
+		fw.append("N = "+joblist.size()+";\n");
+		fw.append("P = [");
 		for(int i=0;i<joblist.size()-1;i++)
 			fw.append(joblist.get(i).processingTime+",");
 		fw.append(joblist.get(joblist.size()-1).processingTime+"];\n");
 		
 
-		fw.append("r = [");
+		fw.append("R = [");
 		for(int i=0;i<joblist.size()-1;i++)
 			fw.append(joblist.get(i).setUpTime+",");
 		fw.append(joblist.get(joblist.size()-1).setUpTime+"];\n");
 		
-		fw.append("d = [");
+		fw.append("D = [");
 		for(int i=0;i<joblist.size()-1;i++)
 			fw.append(joblist.get(i).dueDate+",");
 		fw.append(joblist.get(joblist.size()-1).dueDate+"];\n");
 		
-		fw.append("w = [");
+		fw.append("W = [");
 		for(int i=0;i<joblist.size()-1;i++)
 			fw.append(joblist.get(i).weight+",");
 		fw.append(joblist.get(joblist.size()-1).weight+"];\n");
@@ -100,6 +99,7 @@ public class DataGenerator
 		fw.flush();
 		fw.close();
 		System.out.println("Data stored in : "+file.getAbsolutePath());
+		return file.getPath();
 	}
 	public List<Job> getJoblist() {
 		return joblist;

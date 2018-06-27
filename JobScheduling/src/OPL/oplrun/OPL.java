@@ -40,7 +40,7 @@ public class OPL {
 		this.dg = dg;
 	}
 	
-	public void startEngine() throws IloException{
+	public void startEngine() throws Exception{
 		IloOplFactory.setDebugMode(debugMode);
 		oplF = new IloOplFactory();
 		IloOplErrorHandler errHandler = oplF.createOplErrorHandler();
@@ -50,10 +50,8 @@ public class OPL {
 		cplex = oplF.createCplex();
 		cplex.setOut(null);
 		opl = oplF.createOplModel(def, cplex);
-		//IloOplDataSource dataSource = new DataModel(oplF);
-		DataModel data = new DataModel(oplF);
-		data.customRead();
-		opl.addDataSource(data);
+		IloOplDataSource dataSource = oplF.createOplDataSource(dg.writeToDat());
+		opl.addDataSource(dataSource);
 		opl.generate();
 	}
 
