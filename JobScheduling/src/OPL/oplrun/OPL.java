@@ -4,6 +4,7 @@ import Data.DataGenerator;
 import ilog.concert.IloDiscreteDataCollectionArray;
 import ilog.concert.IloException;
 import ilog.concert.IloIntMap;
+import ilog.concert.IloMap;
 import ilog.concert.IloNumMap;
 import ilog.cplex.IloCplex;
 import ilog.opl.IloOplDataSource;
@@ -48,9 +49,9 @@ public class OPL {
 		IloOplSettings settings = oplF.createOplSettings(errHandler);
 		IloOplModelDefinition def = oplF.createOplModelDefinition(modelSource,settings);
 		cplex = oplF.createCplex();
-		cplex.setOut(System.out);
+		//cplex.setOut(System.out);
 		opl = oplF.createOplModel(def, cplex);
-		IloOplDataSource dataSource = oplF.createOplDataSource(dg.writeToDat());
+		IloOplDataSource dataSource = oplF.createOplDataSource(dg.writeToDat(""));
 		opl.addDataSource(dataSource);
 		opl.generate();
 	}
@@ -81,6 +82,38 @@ public class OPL {
 			}
 		}
 		return m;
+	}
+	
+	public int[][] getMatrix2DParam(String name) throws IloException{
+	
+		IloIntMap m2d = opl.getElement(name).asIntMap();
+		int row = m2d.getSize();
+		int column = m2d.getSub(1).getSize();
+		int[][] m = new int[row][column];
+		for(int i=1;i<=row;i++){
+			IloIntMap m1d = m2d.getSub(i);
+			for(int j=1;j<=column;j++){
+				String vals = m1d.toString().replaceAll("\n", "");
+				vals = vals.substring(1, vals.length()-1);
+				m[i-1][j-1] = Integer.parseInt(vals.split(",")[j-1].trim());
+			}
+		}
+		return m;
+	}
+	
+	public int getValiable(String name) throws IloException{
+		
+		return opl.getElement(name).asIntVar().getMax();
+	}
+	
+	public void writeSchedule(int[][] ks){
+		for(int i=0; i<ks.length; i++){
+			System.out.print("Job#"+i+">");
+			for(int j=0; j<ks[i].length; j++){
+				System.out.print(ks[i][j]);
+			}
+			System.out.println();
+		}
 	}
 	
 	public void printResult(){

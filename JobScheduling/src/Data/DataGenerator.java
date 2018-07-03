@@ -16,63 +16,86 @@ public class DataGenerator
 {
 	/* Generating a list of jobs using Potts method
 	 * */
-	private String fname;
 	private List<Job> joblist;
-	public DataGenerator(String fname)
+	public DataGenerator()
 	{
-		this.fname=fname;
 	}
+	/**
+	 * 
+	 * @param n number of jobs
+	 * @param r due date range factor: width of the interval centered around average due date
+	 * @param t tardiness factor: is a coarse measure of the proportion of jobs that might be expected to be tardy in an arbitrary sequence
+	 * @param MAX_PI maximum processing time
+	 * @param MIN_WI lower bound of weight
+	 * @param MAX_WI upper bound of weight
+	 * @throws Exception
+	 */
 	public void generateData(int n,double r,double t,int MAX_PI,int MIN_WI,int MAX_WI) throws Exception
 	{
-		if(fname.length()==0)
-			generatePott(n,r,t,MAX_PI,MIN_WI,MAX_WI);
-		else
-			readFromCSV(fname);
+		generatePott(n,r,t,MAX_PI,MIN_WI,MAX_WI);
 	}
 	private void generatePott(int n,double r,double t,int MAX_PI,int MIN_WI,int MAX_WI) throws Exception
 	{
-		int P=0,C=0;
+		int P=0,minR=Integer.MAX_VALUE,minP=Integer.MAX_VALUE; 
 		joblist=new ArrayList<Job>();
 		for(int i=0;i<n;i++)
 		{
 			getJoblist().add(new Job(Integer.toString(i), (int)(1+(MAX_PI-1)*Math.random()), 0, 0));
 			P+=getJoblist().get(i).processingTime;
+			if(getJoblist().get(i).processingTime<minP) minP = getJoblist().get(i).processingTime;
 		}
 		for(int i=0;i<n;i++) 
 		{
-			C+=getJoblist().get(i).processingTime;
+			//what if d is 0? minimum due date is alwys minimum processing time
 			getJoblist().get(i).dueDate=(int)(Math.ceil(P*(1-t-r/2))+(Math.ceil(P*(1-t+r/2))-Math.ceil(P*(1-t-r/2)))*Math.random());
-			getJoblist().get(i).setUpTime=(int)(C/2*Math.random());
-			getJoblist().get(i).waitTime=(int)(MIN_WI+(MAX_WI-MIN_WI)*Math.random());
+			getJoblist().get(i).dueDate = Math.max(0, getJoblist().get(i).dueDate);
+			//job needs to be ready at least before due date
+			getJoblist().get(i).setUpTime= 0 + (int)((getJoblist().get(i).dueDate)*Math.random()); 
+			getJoblist().get(i).weight=(int)(MIN_WI+(MAX_WI-MIN_WI)*Math.random());
+			if(getJoblist().get(i).setUpTime<minR){
+				minR = getJoblist().get(i).setUpTime; 
+			}
 		}
-		writeToCSV();
+		//this portion of code is for making at least one job available at the beginning of horizon
+		if(minR>0){
+			for(int i=0;i<n;i++) 
+			{
+				getJoblist().get(i).setUpTime -= minR;
+			}
+		}
 	}
 	
-	private void writeToCSV() throws IOException
+	public String writeToCSV(String filePath) throws IOException
 	{
-		File file =new File("Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".csv");
+		if(filePath.length()==0){
+			filePath = "Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".csv";
+		}
+		File file =new File(filePath);
 		FileWriter fw=new FileWriter(file);
 		for(Job i:getJoblist())
 			fw.append(i.toString()+"\n");
 		fw.flush();
 		fw.close();
 		System.out.println("Data stored in : "+file.getAbsolutePath());
-		
+		return file.getAbsolutePath();
 	}
 	
-	private void readFromCSV(String fname) throws Exception
+	public void readFromCSV(String fname) throws Exception
 	{
-		
-		BufferedReader read= new BufferedReader(new FileReader("Data\\"+fname));
+		BufferedReader read= new BufferedReader(new FileReader(fname));
 		String line=null;
 		joblist=new ArrayList<Job>();
 		while((line=read.readLine())!=null)
 			getJoblist().add(new Job(line));
 		read.close();
 	}
-	public String writeToDat() throws Exception
-	{
-		File file =new File("Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".dat");
+	
+	public String writeToDat(String filePath) throws Exception
+	{		
+		if(filePath.length()==0){
+			filePath = "Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".dat";
+		}
+		File file =new File(filePath);
 		FileWriter fw=new FileWriter(file);
 		fw.append("N = "+joblist.size()+";\n");
 		fw.append("P = [");
@@ -99,17 +122,10 @@ public class DataGenerator
 		fw.flush();
 		fw.close();
 		System.out.println("Data stored in : "+file.getAbsolutePath());
-		return file.getPath();
+		return file.getAbsolutePath();
 	}
+	
 	public List<Job> getJoblist() {
 		return joblist;
-	}
-	public void setfname(String fname)
-	{
-		this.fname=fname;
-	}
-	public String getfname()
-	{
-		return fname;
 	}
 }

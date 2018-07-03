@@ -32,13 +32,13 @@ public class Job implements Cloneable{
 	 * @param setUpTime
 	 * @param parent
 	 */
-	public Job( String jobID, int processingTime, int dueDate, int setUpTime,int waitTime) {
+	public Job( String jobID, int processingTime, int dueDate, int setUpTime,int weight) {
 		
 		this.jobID = jobID;
 		this.processingTime = processingTime;
 		this.dueDate = dueDate;
 		this.setUpTime = setUpTime;
-		this.waitTime=waitTime;
+		this.weight=weight;
 	}
 	public Job(String s)
 	{
@@ -61,6 +61,14 @@ public class Job implements Cloneable{
 			return false;
 	}
 	
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return isEqualTo((Job) obj);
+	}
+
 	public String toString(){
 		String s;
 		s = this.jobID+","+this.processingTime+","+this.dueDate+","+this.setUpTime+","+this.weight;
@@ -74,7 +82,7 @@ public class Job implements Cloneable{
 	@Override
 	protected Job clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
-		return new Job(jobID, processingTime, dueDate, setUpTime, waitTime);
+		return new Job(jobID, processingTime, dueDate, setUpTime, weight);
 	}
 	
 }
