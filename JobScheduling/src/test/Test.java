@@ -1,5 +1,13 @@
 package test;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import Data.DataGenerator;
 import Job.Job;
 import Job.JobScheduler;
@@ -71,6 +79,12 @@ public class Test {
 		Integer[] schedule = wsrpt.schedule();
 		System.out.println( "Total tardiness achieved by heuristic = " + wsrpt.getTotalTardiness(schedule));
 		wsrpt.writeSchedule(schedule);
+		OPL opl = new OPL(modelPath, dg);	
+		opl.startEngine();
+		opl.solve();
+		opl.printResult();
+		opl.writeSchedule(opl.getMatrix2DParam("X"));
+		opl.closeOPL();
 	}
 	
 	/**
@@ -86,6 +100,12 @@ public class Test {
 		Integer[] schedule = wsrpt.schedule();
 		System.out.println( "Total tardiness achieved by heuristic = " + wsrpt.getTotalTardiness(schedule));
 		wsrpt.writeSchedule(schedule);
+		OPL opl = new OPL(modelPath, dg);	
+		opl.startEngine();
+		opl.solve();
+		opl.printResult();
+		opl.writeSchedule(opl.getMatrix2DParam("X"));
+		opl.closeOPL();
 	}
 	
 	/**
@@ -101,5 +121,71 @@ public class Test {
 		Integer[] schedule = wsrpt.schedule();
 		System.out.println( "Total tardiness achieved by heuristic = " + wsrpt.getTotalTardiness(schedule));
 		wsrpt.writeSchedule(schedule);
+		OPL opl = new OPL(modelPath, dg);	
+		opl.startEngine();
+		opl.solve();
+		opl.printResult();
+		opl.writeSchedule(opl.getMatrix2DParam("X"));
+		opl.closeOPL();
+	}
+	
+	
+	/**
+	 * Unit Case
+	 * j5-r8-t6-5-1-10_c
+	 * @throws Exception
+	 */
+	@org.junit.Test
+	public void testHeuristic4Comp() throws Exception{
+		
+		runTest1(10, 0.3, 0.6);
+		
+	}
+	
+	
+	@org.junit.Test
+	public void testHeuristic5Comp() throws Exception{
+		
+		for(int i=0; i< 5; i++) runTest1(5, 0.2, 0.3);
+//		for(int i=0; i< 5; i++) runTest1(5, 0.3, 0.6);
+//		for(int i=0; i< 5; i++) runTest1(5, 0.6, 0.8);
+//		for(int i=0; i< 5; i++) runTest1(10, 0.2, 0.3);
+//		for(int i=0; i< 5; i++) runTest1(10, 0.3, 0.6);
+//		for(int i=0; i< 5; i++) runTest1(10, 0.6, 0.8);
+		
+	}
+	
+	public void runTest1(int n, double r, double t) throws Exception{
+		String filePath = "C:\\Users\\sarkara1\\git\\Job-Scheduling\\JobScheduling\\data\\result.csv";
+		File file =new File(filePath);
+		FileWriter rw=new FileWriter(file, true);
+		String res = "";
+		DataGenerator dg=new DataGenerator();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMddHHmmss");
+		LocalDateTime now = LocalDateTime.now();
+		res = dtf.format(now) + ",";
+		dg.generateData(n, r, t, 10, 1, 10);
+		//dg.readFromCSV("C:\\Users\\sarkara1\\git\\Job-Scheduling\\JobScheduling\\data\\j5-r4-t3-5-1-10_b.csv");
+		JobScheduler wsrpt = new JobScheduler(dg);	
+		Integer[] schedule = wsrpt.schedule();
+		int tt = wsrpt.getTotalTardiness(schedule);
+		System.out.println( "Total tardiness achieved by heuristic = " + tt);
+		res += String.valueOf(tt)+",";
+		res += String.valueOf(wsrpt.getCPUTime()) +",";
+		wsrpt.writeSchedule(schedule);
+		OPL opl = new OPL(modelPath, dg);	
+		opl.startEngine();
+		opl.solve();
+		opl.printResult();
+		opl.writeSchedule(opl.getMatrix2DParam("X"));
+		int tto = opl.getObjectiveValue();
+		res += String.valueOf(tto)+",";
+		res +=String.valueOf(opl.getTimeTaken())+",";
+		res += String.valueOf((tt-tto)*100/tto)+",";
+		res += dg.outputFileName+"\n";
+		rw.write(res);
+		rw.flush();
+		rw.close();
+		opl.closeOPL();
 	}
 }

@@ -33,6 +33,8 @@ public class OPL {
 	IloOplModel opl;
 	DataGenerator dg;
 	
+	Long timeTaken = 0L;
+	 
 	boolean debugMode = false;
 	
 	public OPL(String modelPath,DataGenerator dg) {
@@ -57,6 +59,7 @@ public class OPL {
 	}
 
 	public void solve() throws Exception{
+		timeTaken = System.currentTimeMillis();
 		if (cplex.solve()){
 			System.out.println("OBJECTIVE: " + opl.getCplex().getObjValue());
 			opl.postProcess();
@@ -65,6 +68,7 @@ public class OPL {
 		{
 			throw new Exception("No Solution is found");
 		}
+		timeTaken = (System.currentTimeMillis() - timeTaken) / 1000;
 	}
 	
 	public double[][][] getMatrix3DParam(String name) throws IloException{
@@ -120,6 +124,10 @@ public class OPL {
 		opl.printSolution(System.out);
 	}
 	
+	public int getObjectiveValue() throws IloException{
+		return (int) Math.abs(opl.getCplex().getObjValue());
+	}
+	
 	public void handleException(Exception ex){
 		if(ex instanceof IloOplException){
 			System.err.println("### OPL exception: " + ex.getMessage());
@@ -141,6 +149,10 @@ public class OPL {
 			 opl.getCP().end();
 		oplF.end();
 			 
+	}
+
+	public int getTimeTaken() {
+		return timeTaken.intValue();
 	}
 	
 }

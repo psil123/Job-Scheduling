@@ -17,6 +17,8 @@ public class DataGenerator
 	/* Generating a list of jobs using Potts method
 	 * */
 	private List<Job> joblist;
+	public String outputFileName = "";
+	
 	public DataGenerator()
 	{
 	}
@@ -93,7 +95,8 @@ public class DataGenerator
 	public String writeToDat(String filePath) throws Exception
 	{		
 		if(filePath.length()==0){
-			filePath = "Data\\potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".dat";
+			outputFileName = "potts_n_jobs_"+new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())+".dat";
+			filePath = "Data\\" + outputFileName;
 		}
 		File file =new File(filePath);
 		FileWriter fw=new FileWriter(file);
